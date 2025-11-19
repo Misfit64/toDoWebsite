@@ -1,0 +1,14 @@
+getter/setter/ accessor/mutator
+
+mail verified
+password reset
+
+
+
+
+EoD Report
+Toast Flash Messaging Done for successful login,task created,updated,deleted
+A welcome email done for successful registration
+Added Accessor & Mutator to usernames and emails columns to be case-insensitive and
+ updated validation in registration controller to first strtolower then check unique constraint
+

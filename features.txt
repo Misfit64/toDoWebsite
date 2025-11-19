@@ -1,0 +1,6 @@
+ToDoWebsite Features
+basic CRUD AJAX for task
+flashing toast for CRUD and login
+AJAX registration page
+Welcome email for successful registration
+usernames and email field are case-insensitive
