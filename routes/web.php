@@ -27,7 +27,3 @@ Route::controller(SignupController::class)->group(function(){
     Route::get('/signup', 'index')->name('signup')->middleware('guest');
     Route::post('/signup','store')->middleware('guest');
 });
-
-// Route::get('/test', function () {
-//     return new \App\Mail\UserCreated($user = Auth::user());
-// });

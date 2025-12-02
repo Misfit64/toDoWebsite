@@ -2,13 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\TaskStatus;
 use App\Models\ToDoList;
 use App\Models\User;
-use Clockwork\Request\UserData;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Redis;
 
 class HomeController extends Controller
 {
@@ -29,7 +27,7 @@ class HomeController extends Controller
         $user = Auth::user();
         $new_task = $user->tasks()->create([
                     "task"=> $task["task"],
-                    "task_status"=>0,
+                    "task_status"=>TaskStatus::PENDING->value,
                     ]);
 
         return response("$new_task->id
@@ -61,10 +59,10 @@ class HomeController extends Controller
             abort(404);
         }
         $status= $task->update([
-                    'task_status' => !$task->task_status,
+                    'task_status' => !$task->task_status->value,
                 ]);
 
-        return response("",200);
+        return response($task->task_status->label(),200);
     }
 
     public function destroy($id){

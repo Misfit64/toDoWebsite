@@ -4,6 +4,8 @@
     @push('scripts')
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/axios@1.6.7/dist/axios.min.js"></script>
+        <link rel="stylesheet" href="https://cdn.datatables.net/2.3.5/css/dataTables.dataTables.css" />
+        <script src="https://cdn.datatables.net/2.3.5/js/dataTables.js"></script>
     @endpush
     <h2 class="text-center mt-5">toDo's
         <button type="button" class="btn btn-outline-secondary border-0" id="createTaskBtn">
@@ -11,16 +13,27 @@
         </button>
     </h2>
     <div class="container dflex align-items-center flex-column mt-5">
-        <table class="table table-striped">
-        @forelse ($tasks as $task)
-                <tr data-id="{{ $task->id }}">
-                    <x-task :$task />
-                    <x-buttons />
+        <table class="table table-striped" id="taskTable">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Tasks</th>
+                    <th>Status</th>
+                    <th>Actions</th>
                 </tr>
+            </thead>
+            <tbody>
+                @forelse ($tasks as $task)
+                    <tr data-id="{{ $task->id }}">
+                        <td></td>
+                        <x-task :$task />
+                        <x-buttons />
+                    </tr>
                 @empty
-                <x-task-row />
+                    <x-task-row />
                 @endforelse
-            </table>
+            </tbody>
+        </table>
     </div>
 
 <div aria-live="polite" aria-atomic="true" class="position-relative">
@@ -142,6 +155,7 @@
             row.querySelector("input[type=text]").classList.toggle('text-decoration-line-through')
             axios.patch(`task/${task_id}/status`)
             .then(response=>{
+                row.querySelector(".status").textContent = response.data
                 createToast("Task updated")
             })
             .catch(error =>{
@@ -207,5 +221,27 @@
                 });
 
         }
-    </script>
+
+        const dtable = new DataTable('#taskTable',{
+                columnDefs: [
+                    {
+                        searchable: false,
+                        orderable: false,
+                        targets: [0,3]
+                    }
+                ],
+                // order: [[1, 'asc']],
+                on: {
+                    draw: (e) => {
+                        let start = e.dt.page.info().start;
+
+                        e.dt.column(0, {page: 'current'})
+                            .nodes()
+                            .each((cell, i) => {
+                                cell.textContent = start + i + 1;
+                            });
+                    }
+                }
+            });
+        </script>
 </x-app-layout>
