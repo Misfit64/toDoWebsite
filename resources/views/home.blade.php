@@ -94,7 +94,8 @@
             }
             createBtn.removeEventListener("click", createRowHandler);
             new_task = document.createElement('tr');
-            new_task.innerHTML = `<x-task :create='true'/>
+            new_task.innerHTML = `<td></td>
+                                <x-task :create='true'/>
                                 <x-buttons />`;
             table.prepend(new_task);
             input_task = new_task.querySelector('input[type=text]');
@@ -126,6 +127,7 @@
                 new_task.setAttribute('data-id',response.data);
                 createBtn.addEventListener("click", createRowHandler);
                 createToast("Task successfully created");
+                
             })
             .catch((error)=>{
                 console.error(error)
@@ -222,7 +224,7 @@
 
         }
 
-        const dtable = new DataTable('#taskTable',{
+        const dTable = new DataTable('#taskTable',{
                 columnDefs: [
                     {
                         searchable: false,
@@ -230,7 +232,7 @@
                         targets: [0,3]
                     }
                 ],
-                // order: [[1, 'asc']],
+                // order: [[2, 'desc']],
                 on: {
                     draw: (e) => {
                         let start = e.dt.page.info().start;
